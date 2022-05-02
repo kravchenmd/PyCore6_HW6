@@ -24,6 +24,3 @@ def normalize(name: str) -> str:
     t_name += name.suffix
 
     return t_name
-
-
-normalize()

@@ -29,7 +29,7 @@ def handle_archive(filename: Path, target_folder: Path):
         shutil.unpack_archive(str(filename.resolve()),
                               str(folder_for_file.resolve()))
     except shutil.ReadError:
-        print(f'Обман - это не архив {filename}!')
+        print(f"{filename} isn't an archive!")
         folder_for_file.rmdir()
         return None
     filename.unlink()
@@ -39,30 +39,29 @@ def handle_folder(folder: Path):
     try:
         folder.rmdir()
     except OSError:
-        print(f'Не удалось удалить папку {folder}')
+        print(f'Not possible to delete folder {folder}')
 
 
 def main(folder: Path):
     parser.scan(folder)
 
-    for file in parser.JPEG_IMAGES:
-        handle_media(file, folder / 'images' / 'JPEG')
-    for file in parser.JPG_IMAGES:
-        handle_media(file, folder / 'images' / 'JPG')
-    for file in parser.PNG_IMAGES:
-        handle_media(file, folder / 'images' / 'PNG')
-    for file in parser.SVG_IMAGES:
-        handle_media(file, folder / 'images' / 'SVG')
-    for file in parser.MP3_AUDIO:
-        handle_media(file, folder / 'audio' / 'MP3')
+    for file in parser.IMAGES:
+        handle_media(file, folder / 'images')
+    for file in parser.DOCUMENTS:
+        handle_media(file, folder / 'documents')
+    for file in parser.AUDIO:
+        handle_media(file, folder / 'audio')
+    for file in parser.VIDEO:
+        handle_media(file, folder / 'video')
 
-    for file in parser.OTHER:
-        handle_other(file, folder / 'OTHER')
     for file in parser.ARCHIVES:
         handle_archive(file, folder / 'archives')
+    # for file in parser.OTHER:
+    #     handle_other(file, folder / 'OTHER_TYPES')
 
     # Выполняем реверс списка для того, чтобы все папки удалить.
-    for folder in parser.FOLDERS[::-1]:
+    # we don't need to anything with files of OTHER type => exclude folders that contain them
+    for folder in list(set(parser.FOLDERS) - set(parser.FOLDERS_UNKNOWN))[::-1]:
         handle_folder(folder)
 
 

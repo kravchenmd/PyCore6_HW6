@@ -7,7 +7,7 @@ DOCUMENTS = []
 AUDIO = []
 VIDEO = []
 ARCHIVES = []
-OTHER_TYPES = []
+OTHER = []
 
 # dict to choose proper container based on the type of file
 EXTENSIONS_CONT = {
@@ -30,6 +30,7 @@ EXTENSIONS_DICT = {
 FOLDERS = []
 EXTENSIONS = set()
 UNKNOWN = set()
+FOLDERS_UNKNOWN = []
 
 
 def get_extension(filename: str) -> str:
@@ -41,7 +42,7 @@ def scan(folder: Path) -> None:
         # Если это папка то добавляем ее с список FOLDERS и преходим к следующему элементу папки
         if item.is_dir():
             # проверяем, чтобы папка не была той в которую мы складываем уже файлы
-            if item.name not in ('archives', 'video', 'audio', 'documents', 'images', 'OTHER_TYPES'):
+            if item.name not in ('archives', 'video', 'audio', 'documents', 'images'):
                 FOLDERS.append(item)
                 #  сканируем эту вложенную папку - рекурсия
                 scan(item)
@@ -52,21 +53,22 @@ def scan(folder: Path) -> None:
         ext = get_extension(item.name)  # взять расширение
         fullname = folder / item.name  # взять полный путь к файлу
         if not ext:  # если у файла нет расширения добавить к неизвестным
-            OTHER_TYPES.append(fullname)
+            OTHER.append(fullname)
         else:
-            try:
-                for k, v in EXTENSIONS_DICT.items():
-                    # at first choose type of extention
-                    if ext in v:
-                        # then choose proper contaner
-                        container = EXTENSIONS_CONT[k]
-
-                EXTENSIONS.add(ext)
-                container.append(fullname)
-            except KeyError:
+            for k, v in EXTENSIONS_DICT.items():
+                # at first choose type of extention
+                if ext in v:
+                    # then choose proper contaner
+                    container = EXTENSIONS_CONT[k]
+                    EXTENSIONS.add(ext)
+                    container.append(fullname)
+                    break
+            else:
                 # Если мы не регистрировали расширение в REGISTER_EXTENSIONS, то добавить в другое
                 UNKNOWN.add(ext)
-                OTHER_TYPES.append(fullname)
+                OTHER.append(fullname)
+                # to save folder that contain file with type OTHER
+                FOLDERS_UNKNOWN.append(item.parent.absolute())
 
 
 if __name__ == '__main__':
@@ -79,8 +81,12 @@ if __name__ == '__main__':
     print(f'Audio: {AUDIO}')
     print(f'Archives: {ARCHIVES}')
 
+    print()
     print(f'Types of files in folder: {EXTENSIONS}')
 
-    print(f'Unknown files of types: {UNKNOWN}')
+    print()
+    print(f'Unknown files: {OTHER}')
+    print(f"In folders: {FOLDERS_UNKNOWN}")
+    print(f'With following types: {UNKNOWN}')
 
     print(FOLDERS[::-1])

@@ -5,17 +5,17 @@ import file_parser as parser
 from normalize import normalize
 
 
-def handle_media(filename: Path, target_folder: Path):
+def handle_media(filename: Path, target_folder: Path) -> None:
     target_folder.mkdir(exist_ok=True, parents=True)
     filename.replace(target_folder / normalize(filename.name))
 
 
-def handle_other(filename: Path, target_folder: Path):
+def handle_other(filename: Path, target_folder: Path) -> None:
     target_folder.mkdir(exist_ok=True, parents=True)
     filename.replace(target_folder / normalize(filename.name))
 
 
-def handle_archive(filename: Path, target_folder: Path):
+def handle_archive(filename: Path, target_folder: Path) -> None:
     # Создаем папку для архивов
     target_folder.mkdir(exist_ok=True, parents=True)
     #  Создаем папку куда распаковываем архив
@@ -35,14 +35,14 @@ def handle_archive(filename: Path, target_folder: Path):
     filename.unlink()
 
 
-def handle_folder(folder: Path):
+def handle_folder(folder: Path) -> None:
     try:
         folder.rmdir()
     except OSError:
         print(f'Not possible to delete folder {folder}')
 
 
-def main(folder: Path):
+def main(folder: Path) -> None:
     parser.scan(folder)
 
     for file in parser.IMAGES:

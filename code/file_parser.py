@@ -9,6 +9,10 @@ VIDEO = []
 ARCHIVES = []
 OTHER = []
 
+# set of folders for sorting
+FOLDER_NAMES = ('archives', 'video', 'audio',
+                'documents', 'images', 'OTHER_TYPES')
+
 # dict to choose proper container based on the type of file
 EXTENSIONS_CONT = {
     'IMAGES': IMAGES,
@@ -22,9 +26,9 @@ EXTENSIONS_CONT = {
 EXTENSIONS_DICT = {
     'IMAGES': ('jpg', 'jpeg', 'png', 'svg'),
     'DOCUMENTS': ('txt', 'doc', 'docx', 'pdf'),
-    'AUDIO': ('mp3',),
-    'VIDEO': (),
-    'ARCHIVES': ('zip',)
+    'AUDIO': ('mp3', 'wav', 'wma'),
+    'VIDEO': ('mp4', 'avi', 'mkv', 'mov'),
+    'ARCHIVES': ('zip', '7z', 'tar')
 }
 
 FOLDERS = []
@@ -42,7 +46,7 @@ def scan(folder: Path) -> None:
         # Если это папка то добавляем ее с список FOLDERS и преходим к следующему элементу папки
         if item.is_dir():
             # проверяем, чтобы папка не была той в которую мы складываем уже файлы
-            if item.name not in ('archives', 'video', 'audio', 'documents', 'images'):
+            if item.name not in FOLDER_NAMES:
                 FOLDERS.append(item)
                 #  сканируем эту вложенную папку - рекурсия
                 scan(item)
@@ -79,6 +83,7 @@ if __name__ == '__main__':
     print(f'Images: {IMAGES}')
     print(f'Documents: {DOCUMENTS}')
     print(f'Audio: {AUDIO}')
+    print(f'Video: {VIDEO}')
     print(f'Archives: {ARCHIVES}')
 
     print()

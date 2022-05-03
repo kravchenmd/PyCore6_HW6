@@ -56,12 +56,13 @@ def main(folder: Path):
 
     for file in parser.ARCHIVES:
         handle_archive(file, folder / 'archives')
-    # for file in parser.OTHER:
-    #     handle_other(file, folder / 'OTHER_TYPES')
+
+    for file in parser.OTHER:
+        handle_other(file, folder / 'OTHER_TYPES')
 
     # Выполняем реверс списка для того, чтобы все папки удалить.
     # we don't need to anything with files of OTHER type => exclude folders that contain them
-    for folder in list(set(parser.FOLDERS) - set(parser.FOLDERS_UNKNOWN))[::-1]:
+    for folder in parser.FOLDERS[::-1]:
         handle_folder(folder)
 
 
@@ -70,6 +71,3 @@ if __name__ == '__main__':
         folder_for_scan = Path(sys.argv[1])
         print(f'Start in folder {folder_for_scan.resolve()}')
         main(folder_for_scan.resolve())
-
-
-# cat.jpg  cat.JPG

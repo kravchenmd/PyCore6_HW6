@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+
 # containers for file names
 IMAGES = []
 DOCUMENTS = []
@@ -71,12 +72,13 @@ def scan(folder: Path) -> None:
                 # Если мы не регистрировали расширение в REGISTER_EXTENSIONS, то добавить в другое
                 UNKNOWN.add(ext)
                 OTHER.append(fullname)
-                # to save folder that contain file with type OTHER
+                # save folder that contain file with type OTHER
                 FOLDERS_UNKNOWN.append(item.parent.absolute())
 
 
 if __name__ == '__main__':
     folder_for_scan = sys.argv[1]
+    print()
     print(f'Start in folder {folder_for_scan}')
 
     scan(Path(folder_for_scan))
@@ -94,4 +96,4 @@ if __name__ == '__main__':
     print(f"In folders: {FOLDERS_UNKNOWN}")
     print(f'With following types: {UNKNOWN}')
 
-    print(FOLDERS[::-1])
+    print(f"{FOLDERS[::-1]}\n")

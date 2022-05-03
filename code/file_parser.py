@@ -43,6 +43,10 @@ def get_extension(filename: str) -> str:
 
 
 def scan(folder: Path) -> None:
+    """
+    Scans the folder and fill containers with files names sorted by their type,
+    names of folders and extenstions.
+    """
     for item in folder.iterdir():
         # Если это папка то добавляем ее с список FOLDERS и преходим к следующему элементу папки
         if item.is_dir():

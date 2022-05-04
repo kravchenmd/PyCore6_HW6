@@ -29,7 +29,7 @@ EXTENSIONS_DICT = {
     'DOCUMENTS': ('txt', 'doc', 'docx', 'pdf'),
     'AUDIO': ('mp3', 'wav', 'wma'),
     'VIDEO': ('mp4', 'avi', 'mkv', 'mov'),
-    'ARCHIVES': ('zip', '7z', 'tar')
+    'ARCHIVES': ('zip', 'tar', 'gztar')
 }
 
 FOLDERS = []
